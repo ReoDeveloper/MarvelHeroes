@@ -1,3 +1,5 @@
 package com.reodeveloper.marvelheroes.domain.model
 
-data class Image(var path: String, var extension: String)
+import java.io.Serializable
+
+data class Image(var path: String, var extension: String) : Serializable
