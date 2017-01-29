@@ -41,28 +41,6 @@ public class ComicRetrofitDatasource implements DataSource<Comic> {
     service = retrofit.create(Service.class);
   }
 
-  @Override public Comic get(int id) {
-    Call<ApiComicDataWrapper> call = service.getComicById(id);
-    Response<ApiComicDataWrapper> callResponse = null;
-    try {
-      callResponse = call.execute();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    if ((callResponse != null) && callResponse.isSuccessful()) {
-      ApiComicDataWrapper apiComicDataWrapper = callResponse.body();
-      ApiComicDataContainer apiComicDataContainer = apiComicDataWrapper.getData();
-      List<ApiComic> apiComic = null;
-      if (apiComicDataContainer != null) {
-        apiComic = apiComicDataContainer.getResults();
-      }
-      if (apiComic != null && apiComic.size() > 0) {
-        return mapper.map(apiComic.get(0));
-      }
-    }
-    return null;
-  }
-
   @Override public List<Comic> query(int id) {
     Call<ApiComicDataWrapper> call = service.getAllComicsByIdCharacter(id);
     Response<ApiComicDataWrapper> callResponse = null;
@@ -88,7 +66,5 @@ public class ComicRetrofitDatasource implements DataSource<Comic> {
   private interface Service {
     @GET("characters/{characterId}/comics") Call<ApiComicDataWrapper> getAllComicsByIdCharacter(
         @Path("idCharacter") int idCharacter);
-
-    @GET("comics/{idComic}") Call<ApiComicDataWrapper> getComicById(@Path("idComic") int idComic);
   }
 }
