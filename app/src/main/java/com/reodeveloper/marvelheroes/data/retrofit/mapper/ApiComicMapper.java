@@ -21,8 +21,6 @@ public class ApiComicMapper extends Mapper<ApiComic, Comic> {
     comic.setIsbn(item.getIsbn());
     comic.setFormat(item.getFormat());
     comic.setPageCount(item.getPageCount());
-    comic.setSeries(item.getSeries());
-    comic.setDates(item.getDates());
     comic.setThumbnail(item.getThumbnail());
     return comic;
   }
