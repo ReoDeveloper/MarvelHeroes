@@ -1,8 +1,6 @@
 package com.reodeveloper.marvelheroes.domain.model
 
-import java.io.Serializable
-
-data class Comic(var id: Int, var title: String) : Serializable {
+data class Comic(var id: Int, var title: String) {
   var digitalId: Int = 0
   var issueNumber: Double = 0.toDouble()
   var description: String? = null

@@ -70,7 +70,6 @@ public class ComicListActivity extends AppCompatActivity implements ComicListCon
         new ComicListAdapter(items, new ComicListAdapter.ComicListItemClickListener() {
           @Override public void itemClick(Comic item) {
             ComicDetailActivity.start(ComicListActivity.this, item);
-            Toast.makeText(ComicListActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
           }
         });
     recyclerComics.setAdapter(adapter);

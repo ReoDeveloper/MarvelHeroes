@@ -1,4 +1,6 @@
 <resources>
+  <dimen name="uncollapsed_height">250dp</dimen>
+
   <dimen name="text_display">48sp</dimen>
   <dimen name="text_giant">28sp</dimen>
   <dimen name="text_huge">22sp</dimen>

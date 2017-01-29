@@ -1,3 +1,9 @@
 <resources>
   <string name="app_name">MarvelHeroes</string>
+  <string name="txt_title_description">Short description</string>
+  <string name="txt_title_quick_info">Quick information</string>
+  <string name="txt_placeholder_isbn">ISBN: %s</string>
+  <string name="txt_placeholder_issue">Issue number %s</string>
+  <string name="txt_placeholder_format">Format: %s</string>
+  <string name="txt_placeholder_pages">%s pages</string>
 </resources>
