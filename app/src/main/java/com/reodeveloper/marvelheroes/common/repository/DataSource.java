@@ -1,10 +1,9 @@
 package com.reodeveloper.marvelheroes.common.repository;
 
-import com.reodeveloper.marvelheroes.common.specification.Specification;
 import java.util.List;
 
 public interface DataSource<T> {
-  T get(Specification specification);
+  T get(int id);
 
-  List<T> query(Specification specification);
+  List<T> query(int id);
 }

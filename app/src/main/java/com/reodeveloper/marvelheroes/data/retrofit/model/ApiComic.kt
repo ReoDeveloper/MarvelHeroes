@@ -1,4 +1,4 @@
-package com.reodeveloper.marvelheroes.data.model
+package com.reodeveloper.marvelheroes.data.retrofit.model
 
 import com.reodeveloper.marvelheroes.domain.model.ComicDates
 import com.reodeveloper.marvelheroes.domain.model.Image
