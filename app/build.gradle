@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion 25
+  buildToolsVersion "24.0.3"
+  defaultConfig {
+    applicationId "com.reodeveloper.marvelheroes"
+    minSdkVersion 16
+    targetSdkVersion 25
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
+}
+
+// Define versions in a single place
+ext {
+  // Core app dependencies
+  supportLibrary = '25.1.0'
+  playServices = '9.0.2'
+  firebase = '9.2.1'
+
+  // Other dependencies
+  picasso = '2.5.2'
+  retrofit = '2.0.1'
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  // Testing
+  testCompile 'junit:junit:4.12'
+  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+
+  // Google's support libraries
+  compile "com.android.support:appcompat-v7:$supportLibrary"
+
+  // Kotlin
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  // Picasso
+  compile "com.squareup.picasso:picasso:$picasso"
+
+  // Retrofit
+  compile "com.squareup.retrofit2:retrofit:$retrofit"
+  compile "com.squareup.retrofit2:converter-gson:$retrofit"
+}
+repositories {
+  mavenCentral()
+}
