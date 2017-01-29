@@ -9,10 +9,6 @@ public class Repository<T> {
     this.datasource = datasource;
   }
 
-  public T get(int id) {
-    return datasource.get(id);
-  }
-
   public List<T> query(int id) {
     return datasource.query(id);
   }
