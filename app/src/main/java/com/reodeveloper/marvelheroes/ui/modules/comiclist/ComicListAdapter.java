@@ -44,7 +44,7 @@ class ComicListAdapter extends RecyclerView.Adapter<ComicListAdapter.ViewHolder>
   }
 
   interface ComicListItemClickListener {
-    void itemClick(Comic item);
+    void itemClick(Comic item, ImageView cover);
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +60,7 @@ class ComicListAdapter extends RecyclerView.Adapter<ComicListAdapter.ViewHolder>
     void bind(final Comic item, final ComicListItemClickListener listener) {
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          listener.itemClick(item);
+          listener.itemClick(item, cover);
         }
       });
     }

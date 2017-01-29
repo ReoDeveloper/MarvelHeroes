@@ -1,18 +1,24 @@
 package com.reodeveloper.marvelheroes.ui.modules.comicdetail;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.reodeveloper.marvelheroes.R;
 import com.reodeveloper.marvelheroes.domain.model.Comic;
 import com.squareup.picasso.Picasso;
+
 
 public class ComicDetailActivity extends AppCompatActivity implements ComicDetailContract.View {
 
@@ -24,10 +30,13 @@ public class ComicDetailActivity extends AppCompatActivity implements ComicDetai
   public static final String FORMAT = "format";
   public static final String PAGES = "pages";
 
+  public static final String SHARED = "shared";
+
   private CollapsingToolbarLayout collapsingToolbarLayout;
+  private Toolbar toolbar;
   private ComicDetailContract.Actions presenter;
 
-  public static void start(Context context, Comic item) {
+  public static void start(Activity context, Comic item, ImageView shared) {
     Intent intent = new Intent(context, ComicDetailActivity.class);
     String cover = item.getThumbnail().getPath() + "." + item.getThumbnail().getExtension();
     intent.putExtra(TITLE, item.getTitle());
@@ -37,7 +46,11 @@ public class ComicDetailActivity extends AppCompatActivity implements ComicDetai
     intent.putExtra(ISSUE, item.getIssueNumber());
     intent.putExtra(FORMAT, item.getFormat());
     intent.putExtra(PAGES, item.getPageCount());
-    context.startActivity(intent);
+
+    ActivityOptionsCompat options = ActivityOptionsCompat.
+        makeSceneTransitionAnimation(context, shared, SHARED);
+
+    context.startActivity(intent, options.toBundle());
   }
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +58,7 @@ public class ComicDetailActivity extends AppCompatActivity implements ComicDetai
     setContentView(R.layout.activity_detail);
 
     presenter = new ComicDetailPresenter(this);
+    setupToolbar();
 
     Intent intent = getIntent();
     Bundle args = intent.getExtras();
@@ -58,12 +72,12 @@ public class ComicDetailActivity extends AppCompatActivity implements ComicDetai
     presenter.start(title, descr, cover, isbn, issue, format, pages);
   }
 
-  private void setText(String text, int resPlaceHolder, int resView){
+  private void setText(String text, int resPlaceHolder, int resView) {
     TextView textView = (TextView) findViewById(resView);
-    if(text != null && !text.isEmpty()){
+    if (text != null && !text.isEmpty()) {
       String placeholder = getString(resPlaceHolder);
       textView.setText(String.format(placeholder, text));
-    }else{
+    } else {
       textView.setVisibility(View.GONE);
     }
   }
@@ -96,12 +110,47 @@ public class ComicDetailActivity extends AppCompatActivity implements ComicDetai
   }
 
   @Override public void setDescription(String text) {
-    if(text != null && !text.isEmpty()){
+    if (text != null && !text.isEmpty()) {
       TextView description = (TextView) findViewById(R.id.txtDescription);
       description.setText(text);
-    }else{
+    } else {
       CardView cardDescription = (CardView) findViewById(R.id.lay_card_description);
       cardDescription.setVisibility(View.GONE);
     }
+  }
+
+  private void setupToolbar() {
+    toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+    if (null != getSupportActionBar()) {
+      getSupportActionBar().setHomeButtonEnabled(true);
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        navigateUp();
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override public void onBackPressed() {
+    navigateUp();
+  }
+
+  private void navigateUp() {
+    Intent upIntent = NavUtils.getParentActivityIntent(this);
+    if (shouldUpRecreateTask()) {
+      TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities();
+    } else {
+      NavUtils.navigateUpTo(this, upIntent);
+    }
+  }
+
+  private boolean shouldUpRecreateTask() {
+    return getIntent().getAction() != null;
   }
 }

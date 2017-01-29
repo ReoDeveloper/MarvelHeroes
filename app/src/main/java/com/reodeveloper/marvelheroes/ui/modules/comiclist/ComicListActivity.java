@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.reodeveloper.marvelheroes.R;
 import com.reodeveloper.marvelheroes.common.provider.UseCaseProvider;
@@ -68,8 +69,8 @@ public class ComicListActivity extends AppCompatActivity implements ComicListCon
   @Override public void displayComics(List<Comic> items) {
     ComicListAdapter adapter =
         new ComicListAdapter(items, new ComicListAdapter.ComicListItemClickListener() {
-          @Override public void itemClick(Comic item) {
-            ComicDetailActivity.start(ComicListActivity.this, item);
+          @Override public void itemClick(Comic item, ImageView cover) {
+            ComicDetailActivity.start(ComicListActivity.this, item, cover);
           }
         });
     recyclerComics.setAdapter(adapter);
