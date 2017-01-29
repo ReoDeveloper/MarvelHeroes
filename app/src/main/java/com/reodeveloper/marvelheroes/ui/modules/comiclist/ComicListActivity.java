@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.reodeveloper.marvelheroes.R;
 import com.reodeveloper.marvelheroes.common.provider.UseCaseProvider;
@@ -20,6 +22,7 @@ public class ComicListActivity extends AppCompatActivity implements ComicListCon
   private ComicListContract.Actions presenter;
   private RecyclerView recyclerComics;
   private GridLayoutManager gridLayoutManager;
+  private ProgressBar progressBar;
   private boolean isLoading = false;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class ComicListActivity extends AppCompatActivity implements ComicListCon
     setContentView(R.layout.activity_main);
 
     recyclerComics = (RecyclerView) findViewById(R.id.recyclerComics);
+    progressBar = (ProgressBar) findViewById(R.id.progressBar);
     setupRecyclerView();
 
     presenter = new ComicListPresenter(this, UseCaseProvider.getComicsList(ID_CHARACTER, 0));
@@ -61,9 +65,7 @@ public class ComicListActivity extends AppCompatActivity implements ComicListCon
 
   @Override public void showLoading(boolean show) {
     isLoading = show;
-    if (show) {
-    } else {
-    }
+    progressBar.setVisibility( show ? View.VISIBLE : View.GONE);
   }
 
   @Override public void displayComics(List<Comic> items) {

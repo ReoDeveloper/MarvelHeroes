@@ -7,9 +7,22 @@
     android:layout_height="match_parent"
     tools:context="com.reodeveloper.marvelheroes.ui.modules.comiclist.ComicListActivity"
     >
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/recyclerComics"
+  <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      />
+      >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerComics"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        />
+  </FrameLayout>
 </RelativeLayout>
