@@ -10,10 +10,14 @@ public interface ComicListContract {
 
     void displayComics(List<Comic> items);
 
+    void addComics(List<Comic> items);
+
     void showError(String error);
   }
 
   interface Actions {
     void start();
+
+    void onLastItemReached();
   }
 }

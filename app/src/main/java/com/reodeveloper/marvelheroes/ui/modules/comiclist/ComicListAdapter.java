@@ -21,6 +21,11 @@ class ComicListAdapter extends RecyclerView.Adapter<ComicListAdapter.ViewHolder>
     this.listener = listener;
   }
 
+  public void addItems(List<Comic> items){
+    this.items.addAll(items);
+    notifyDataSetChanged();
+  }
+
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.comic_item, parent, false);
     return new ViewHolder(v);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 import com.reodeveloper.marvelheroes.R;
@@ -17,6 +18,8 @@ public class ComicListActivity extends AppCompatActivity implements ComicListCon
   private final static int ID_CHARACTER = 1009610; // Spider-Man;
   private ComicListContract.Actions presenter;
   private RecyclerView recyclerComics;
+  private GridLayoutManager gridLayoutManager;
+  private boolean isLoading = false;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -25,29 +28,60 @@ public class ComicListActivity extends AppCompatActivity implements ComicListCon
     recyclerComics = (RecyclerView) findViewById(R.id.recyclerComics);
     setupRecyclerView();
 
-    presenter = new ComicListPresenter(this, UseCaseProvider.getComicsList(ID_CHARACTER));
+    presenter = new ComicListPresenter(this, UseCaseProvider.getComicsList(ID_CHARACTER, 0));
     presenter.start();
   }
 
   private void setupRecyclerView() {
-    recyclerComics.setLayoutManager(new GridLayoutManager(this, 2));
+    gridLayoutManager = new GridLayoutManager(this, 2);
+    recyclerComics.setLayoutManager(gridLayoutManager);
+    recyclerComics.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int horizontalScroll, int verticalScroll) {
+        super.onScrolled(recyclerView, horizontalScroll, verticalScroll);
+        checkScrollRecyclerView(gridLayoutManager, horizontalScroll, verticalScroll);
+      }
+    });
+  }
+
+  private void checkScrollRecyclerView(LinearLayoutManager layoutManager, int horizontal,
+      int vertical) {
+    if (vertical > 0) {
+      int visibleItemCount = layoutManager.getChildCount();
+      int totalItemCount = layoutManager.getItemCount();
+      int pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+      if (!isLoading) {
+        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+          presenter.onLastItemReached();
+        }
+      }
+    }
   }
 
   @Override public void showLoading(boolean show) {
-
+    isLoading = show;
+    if (show) {
+    } else {
+    }
   }
 
   @Override public void displayComics(List<Comic> items) {
-    recyclerComics.setAdapter(
+    ComicListAdapter adapter =
         new ComicListAdapter(items, new ComicListAdapter.ComicListItemClickListener() {
           @Override public void itemClick(Comic item) {
             ComicDetailActivity.start(ComicListActivity.this, item);
             Toast.makeText(ComicListActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
           }
-        }));
+        });
+    recyclerComics.setAdapter(adapter);
+  }
+
+  @Override public void addComics(List<Comic> items) {
+    ComicListAdapter adapter = (ComicListAdapter) recyclerComics.getAdapter();
+    adapter.addItems(items);
   }
 
   @Override public void showError(String error) {
-
+    Toast.makeText(ComicListActivity.this, error, Toast.LENGTH_SHORT).show();
   }
 }

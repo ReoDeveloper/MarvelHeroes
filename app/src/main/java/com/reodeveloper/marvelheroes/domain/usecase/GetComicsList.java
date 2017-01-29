@@ -4,20 +4,29 @@ import android.os.Handler;
 import android.os.Looper;
 import com.reodeveloper.marvelheroes.common.repository.Repository;
 import com.reodeveloper.marvelheroes.common.usecase.UseCase;
+import com.reodeveloper.marvelheroes.data.Specification;
 import com.reodeveloper.marvelheroes.domain.model.Comic;
 import java.util.List;
 
 public class GetComicsList extends UseCase<Comic> {
 
-  private final Integer idCharacter;
+  private final Specification specification;
 
-  public GetComicsList(Repository<Comic> repository, Integer idCharacter) {
+  public GetComicsList(Repository<Comic> repository, int idCharacter, int page) {
     super(repository);
-    this.idCharacter = idCharacter;
+    specification = new Specification();
+    specification.setIdCharacter(idCharacter);
+    specification.setPage(page);
+  }
+
+  public GetComicsList nextPage(){
+    int currentPage = specification.getPage();
+    specification.setPage(++currentPage);
+    return this;
   }
 
   @Override public void execute(final Result<Comic> callback) {
-    final List<Comic> items = repository.query(idCharacter);
+    final List<Comic> items = repository.query(specification);
 
     Handler mainHandler = new Handler(Looper.getMainLooper());
     mainHandler.post(new Runnable() {

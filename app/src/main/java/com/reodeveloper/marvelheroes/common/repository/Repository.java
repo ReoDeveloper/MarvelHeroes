@@ -1,5 +1,6 @@
 package com.reodeveloper.marvelheroes.common.repository;
 
+import com.reodeveloper.marvelheroes.data.Specification;
 import java.util.List;
 
 public class Repository<T> {
@@ -9,7 +10,7 @@ public class Repository<T> {
     this.datasource = datasource;
   }
 
-  public List<T> query(int id) {
-    return datasource.query(id);
+  public List<T> query(Specification specification) {
+    return datasource.query(specification);
   }
 }

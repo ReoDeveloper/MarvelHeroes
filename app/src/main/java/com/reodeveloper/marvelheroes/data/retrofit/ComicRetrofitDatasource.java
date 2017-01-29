@@ -2,6 +2,7 @@ package com.reodeveloper.marvelheroes.data.retrofit;
 
 import com.reodeveloper.marvelheroes.common.repository.DataSource;
 import com.reodeveloper.marvelheroes.data.Mapper;
+import com.reodeveloper.marvelheroes.data.Specification;
 import com.reodeveloper.marvelheroes.data.retrofit.model.ApiComic;
 import com.reodeveloper.marvelheroes.data.retrofit.model.ApiComicDataContainer;
 import com.reodeveloper.marvelheroes.data.retrofit.model.ApiComicDataWrapper;
@@ -23,6 +24,8 @@ import retrofit2.http.Query;
 
 public class ComicRetrofitDatasource implements DataSource<Comic> {
   private final static String BASE_URL = "http://gateway.marvel.com/v1/public/";
+
+  private final int RESULTS_PER_PAGE = 20;
 
   private final String APIKEY = "6a7ed890b4b941a925202a5630d5b162";
   private final String SECRET = "0f1d0fdf46a0bf32f962b0b9997233c0395cdf8e";
@@ -48,11 +51,13 @@ public class ComicRetrofitDatasource implements DataSource<Comic> {
     service = retrofit.create(Service.class);
   }
 
-  @Override public List<Comic> query(int id) {
+  @Override public List<Comic> query(Specification specification) {
     Long tsLong = System.currentTimeMillis() / 1000;
     String timestamp = tsLong.toString();
     String hash = new String(Hex.encodeHex(DigestUtils.md5(timestamp + SECRET + APIKEY)));
-    Call<ApiComicDataWrapper> call = service.getAllComicsByIdCharacter(id, APIKEY, hash, timestamp);
+    Call<ApiComicDataWrapper> call =
+        service.getAllComicsByIdCharacter(specification.getIdCharacter(), APIKEY, hash, timestamp,
+            specification.getPage() * RESULTS_PER_PAGE);
 
     Response<ApiComicDataWrapper> callResponse = null;
     try {
@@ -77,6 +82,6 @@ public class ComicRetrofitDatasource implements DataSource<Comic> {
   private interface Service {
     @GET("characters/{idCharacter}/comics") Call<ApiComicDataWrapper> getAllComicsByIdCharacter(
         @Path("idCharacter") int idCharacter, @Query("apikey") String apikey,
-        @Query("hash") String hash, @Query("ts") String timestamp);
+        @Query("hash") String hash, @Query("ts") String timestamp, @Query("offset") int page);
   }
 }
