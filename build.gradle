@@ -5,8 +5,8 @@ buildscript {
   // Define versions in a single place
   ext {
     // Core app dependencies
-    supportLibrary = '25.1.0'
-    kotlin_version = '1.0.6'
+    supportLibrary = '27.1.1'
+    kotlin_version = '1.2.30'
     anko_version = '0.9'
 
     // Other dependencies
@@ -16,9 +16,14 @@ buildscript {
 
   repositories {
     jcenter()
+      google()
+    maven {
+      url 'https://maven.google.com/'
+      name 'Google'
+    }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.3'
+    classpath 'com.android.tools.build:gradle:3.1.2'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
 
@@ -30,6 +35,7 @@ buildscript {
 allprojects {
   repositories {
     jcenter()
+    google()
   }
 }
 
